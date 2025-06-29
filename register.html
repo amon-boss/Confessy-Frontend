@@ -2,34 +2,25 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Inscription | Confessy</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inscription - Confessy</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Confessy</h1>
-    <p class="by">@By_Kevy</p>
-  </header>
-
-  <main class="auth">
-    <h2>Inscription</h2>
+  <div class="container">
+    <h2>Créer un compte</h2>
     <form id="registerForm">
-      <input type="text" name="contact" placeholder="Téléphone ou Email" required />
+      <input type="text" name="contact" placeholder="Email ou téléphone" required />
       <input type="password" name="password" placeholder="Mot de passe" required />
-      <button type="submit">Suivant</button>
+      <input type="text" name="username" placeholder="Nom d'utilisateur (facultatif)" />
+      <label>
+        <input type="checkbox" name="anonymous" />
+        Je veux rester anonyme
+      </label>
+      <button type="submit">S'inscrire</button>
+      <p>Déjà inscrit ? <a href="index.html">Se connecter</a></p>
     </form>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Confessy - Tous droits réservés</p>
-    <div class="footer-links">
-      <a href="legal/politique.html">Politique de confidentialité</a>
-      <a href="legal/cgu.html">C'est quoi Confessy ?</a>
-    </div>
-    <p class="by">By_Kevy</p>
-  </footer>
-
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
