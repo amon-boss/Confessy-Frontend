@@ -1,4 +1,4 @@
-const API_URL = 'https://confessy-backend.onrender.com/api';
+const API_URL = 'https://confessy-backend-dq5t.onrender.com';
 
 // Helpers
 async function postData(url = '', data = {}) {
