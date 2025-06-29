@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mon Profil | Confessy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Confessy</h1>
+    <p class="by">@By_Kevy</p>
+    <button id="btnLogout">Déconnexion</button>
+    <button id="btnDeleteAccount">Supprimer mon compte</button>
+  </header>
+
+  <main>
+    <h2>Mes informations</h2>
+    <form id="profileForm">
+      <label>Nom d'utilisateur ou Anonyme</label>
+      <input type="text" name="username" placeholder="Pseudo" />
+      <label><input type="checkbox" name="anonymous" /> Rester anonyme</label>
+      <button type="submit">Sauvegarder</button>
+    </form>
+
+    <h2>Mes confessions</h2>
+    <div id="myConfessions">
+      <!-- Confessions postées par l'utilisateur -->
+    </div>
+
+    <h2>Inviter des amis</h2>
+    <input type="text" id="inviteLink" readonly />
+    <button id="btnCopyLink">Copier le lien</button>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Confessy - Tous droits réservés</p>
+    <div class="footer-links">
+      <a href="legal/politique.html">Politique de confidentialité</a>
+      <a href="legal/cgu.html">C'est quoi Confessy ?</a>
+    </div>
+    <p class="by">By_Kevy</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
