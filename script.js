@@ -1,6 +1,6 @@
 const API_URL = 'https://confessy-backend-dq5t.onrender.com/api';
 
-// === UTILS ===
+// Utils
 async function postData(url = '', data = {}) {
   const res = await fetch(url, {
     method: 'POST',
@@ -9,7 +9,6 @@ async function postData(url = '', data = {}) {
   });
   return res.json();
 }
-
 async function getData(url = '') {
   const res = await fetch(url, {
     method: 'GET',
@@ -17,102 +16,76 @@ async function getData(url = '') {
   });
   return res.json();
 }
-
 function saveUser(user) {
   localStorage.setItem('confessyUser', JSON.stringify(user));
 }
-
 function getUser() {
   const user = localStorage.getItem('confessyUser');
   return user ? JSON.parse(user) : null;
 }
-
 function clearUser() {
   localStorage.removeItem('confessyUser');
 }
 
-// === LOGIN ===
-const loginForm = document.getElementById('loginForm');
-if (loginForm) {
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const userInput = loginForm.userInput.value.trim();
-    const password = loginForm.password.value.trim();
-    if (!userInput || !password) return alert('Veuillez remplir tous les champs');
-    try {
-      const data = await postData(`${API_URL}/auth/login`, { userInput, password });
-      if (data.success) {
-        saveUser(data.user);
-        if (!data.user.username && !data.user.isAnonymous) {
-          window.location.href = 'choose-username.html';
-        } else {
-          window.location.href = 'home.html';
-        }
-      } else {
-        alert(data.error || 'Erreur de connexion');
-      }
-    } catch (err) {
-      alert('Erreur réseau (connexion) : ' + err.message);
-    }
-  });
-}
-
-// === REGISTER ===
+// INSCRIPTION
 const registerForm = document.getElementById('registerForm');
 if (registerForm) {
   registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const contact = registerForm.contact.value.trim();
     const password = registerForm.password.value.trim();
-    if (!contact || !password) return alert('Tous les champs sont requis');
-    try {
-      const data = await postData(`${API_URL}/auth/register`, { contact, password });
-      if (data.success) {
-        saveUser(data.user);
-        window.location.href = 'choose-username.html';
-      } else {
-        alert(data.error || 'Erreur lors de l\'inscription');
-      }
-    } catch (err) {
-      alert('Erreur réseau (inscription) : ' + err.message);
-    }
-  });
-}
+    const username = registerForm.username.value.trim();
+    const anonymous = registerForm.anonymous.checked;
 
-// === CHOIX DU PSEUDO ===
-const identityForm = document.getElementById('identityForm');
-if (identityForm) {
-  identityForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = identityForm.username.value.trim();
-    const anonymous = identityForm.anonymous.checked;
-    const user = getUser();
-    if (!user) return (window.location.href = 'register.html');
-    if (!anonymous && !username) return alert('Choisissez un pseudo ou cochez anonymat');
+    if (!contact || !password) return alert('Veuillez remplir contact et mot de passe');
+
     try {
-      const data = await postData(`${API_URL}/auth/set-username`, {
-        userId: user._id,
+      const data = await postData(`${API_URL}/auth/register`, {
+        contact,
+        password,
         username: anonymous ? null : username,
-        isAnonymous: anonymous,
+        isAnonymous: anonymous
       });
       if (data.success) {
-        clearUser();
-        alert('Inscription terminée !');
+        alert("Inscription réussie !");
         window.location.href = 'index.html';
       } else {
-        alert(data.error || 'Erreur de validation');
+        alert(data.error || 'Erreur lors de l’inscription');
       }
     } catch (err) {
-      alert('Erreur réseau (set username) : ' + err.message);
+      alert('Erreur réseau : ' + err.message);
     }
   });
 }
 
-// === HOME FEED ===
+// CONNEXION
+const loginForm = document.getElementById('loginForm');
+if (loginForm) {
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const userInput = loginForm.userInput.value.trim();
+    const password = loginForm.password.value.trim();
+
+    if (!userInput || !password) return alert('Veuillez remplir tous les champs');
+
+    try {
+      const data = await postData(`${API_URL}/auth/login`, { userInput, password });
+      if (data.success) {
+        saveUser(data.user);
+        window.location.href = 'home.html';
+      } else {
+        alert(data.error || 'Erreur de connexion');
+      }
+    } catch (err) {
+      alert('Erreur réseau : ' + err.message);
+    }
+  });
+}
+
+// HOME FEED
 const feed = document.getElementById('feed');
 const btnPost = document.getElementById('btnPost');
 const btnProfile = document.getElementById('btnProfile');
-
 if (feed) {
   const user = getUser();
   if (!user) return (window.location.href = 'index.html');
@@ -143,7 +116,7 @@ if (feed) {
   if (btnProfile) btnProfile.onclick = () => (window.location.href = 'profile.html');
 }
 
-// === POSTER CONFESSION ===
+// POST
 const postForm = document.getElementById('postForm');
 if (postForm) {
   postForm.addEventListener('submit', async (e) => {
@@ -169,7 +142,7 @@ if (postForm) {
   });
 }
 
-// === PROFIL UTILISATEUR ===
+// PROFILE
 const profileForm = document.getElementById('profileForm');
 const btnLogout = document.getElementById('btnLogout');
 const btnDeleteAccount = document.getElementById('btnDeleteAccount');
@@ -180,7 +153,6 @@ if (profileForm || btnLogout || btnDeleteAccount || myConfessions || btnHome) {
   const user = getUser();
   if (!user) return (window.location.href = 'index.html');
 
-  // Remplir profil
   if (profileForm) {
     profileForm.username.value = user.username || '';
     profileForm.anonymous.checked = user.isAnonymous;
@@ -203,7 +175,6 @@ if (profileForm || btnLogout || btnDeleteAccount || myConfessions || btnHome) {
     });
   }
 
-  // Mes confessions
   if (myConfessions) {
     async function loadMyConfessions() {
       try {
@@ -235,7 +206,6 @@ if (profileForm || btnLogout || btnDeleteAccount || myConfessions || btnHome) {
     clearUser();
     window.location.href = 'index.html';
   };
-
   if (btnDeleteAccount) btnDeleteAccount.onclick = async () => {
     if (!confirm('Supprimer votre compte ?')) return;
     try {
@@ -249,11 +219,10 @@ if (profileForm || btnLogout || btnDeleteAccount || myConfessions || btnHome) {
       alert('Erreur réseau');
     }
   };
-
   if (btnHome) btnHome.onclick = () => window.location.href = 'home.html';
 }
 
-// === BOUTONS PLACEHOLDER ===
+// Placeholder
 function likePost(id) {
   alert('Like à venir');
 }
@@ -269,4 +238,4 @@ function editConfession(id) {
 }
 function deleteConfession(id) {
   alert('Suppression à venir');
-          }
+  }
